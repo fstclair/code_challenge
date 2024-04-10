@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>challenge_fas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="challenge_fas_files/libs/clipboard/clipboard.min.js"></script>
+<script src="challenge_fas_files/libs/quarto-html/quarto.js"></script>
+<script src="challenge_fas_files/libs/quarto-html/popper.min.js"></script>
+<script src="challenge_fas_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="challenge_fas_files/libs/quarto-html/anchor.min.js"></script>
+<link href="challenge_fas_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="challenge_fas_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="challenge_fas_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="challenge_fas_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="challenge_fas_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">challenge_fas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="coding-challenge" class="level2">
+<h2 class="anchored" data-anchor-id="coding-challenge">Coding Challenge</h2>
+<hr>
+<p>Simple example grouped bar plot</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="challenge_fas_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<hr>
+<section id="review-of-data" class="level3">
+<h3 class="anchored" data-anchor-id="review-of-data">Review of data:</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#bps_aoi_attributes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>bps_aoi_attributes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/bps_aoi_attributes.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 21 Columns: 24
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(4): BPS_MODEL, BPS_NAME, GROUPVEG, FRG_NEW dbl (20): ...1, VALUE, Freq,
+BPS_CODE, ZONE, FRI_REPLAC, FRI_MIXED, FRI_SURF...
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bps_aoi_attributes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 24
+   ...1 VALUE    Freq BPS_CODE  ZONE BPS_MODEL      BPS_NAME GROUPVEG FRI_REPLAC
+  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;
+1     1  2160 3130351    15070    44 15070_44       Ozark-O… Hardwoo…        100
+2     2  2132 2996479    13040    44 13040_32_43_4… Ozark-O… Hardwood        188
+3     3  2141 2350146    13670    44 13670_32_44    Ozark-O… Conifer         347
+4     4  2140 1765782    13640    44 13640_32_44_49 Ozark-O… Hardwood         38
+5     5  2139  530667    13340    44 13340_32_43_44 Ozark-O… Hardwood        316
+6     6  2142  414868    13710    44 13710_44       West Gu… Hardwoo…        121
+# ℹ 15 more variables: FRI_MIXED &lt;dbl&gt;, FRI_SURFAC &lt;dbl&gt;, FRI_ALLFIR &lt;dbl&gt;,
+#   PRC_REPLAC &lt;dbl&gt;, PRC_MIXED &lt;dbl&gt;, PRC_SURFAC &lt;dbl&gt;, FRG_NEW &lt;chr&gt;,
+#   R &lt;dbl&gt;, G &lt;dbl&gt;, B &lt;dbl&gt;, RED &lt;dbl&gt;, GREEN &lt;dbl&gt;, BLUE &lt;dbl&gt;, ACRES &lt;dbl&gt;,
+#   REL_PERCENT &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(bps_aoi_attributes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 24
+   ...1 VALUE  Freq BPS_CODE  ZONE BPS_MODEL        BPS_NAME GROUPVEG FRI_REPLAC
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;
+1    16  2157 24125    14800    44 14800_36_37_44   Gulf an… Riparian       1020
+2    17  2159 19922    15060    44 15060_37_44      West Gu… Hardwood        308
+3    18  2138 11419    13230    44 13230_32_36_37_… West Gu… Hardwood        271
+4    19  2151 13737    14580    44 14580_37_44_45_… West Gu… Hardwoo…        179
+5    20    31   110       31    NA &lt;NA&gt;             Barren-… Barren-…         NA
+6    21  2158   820    14930    44 14930_41_42_44_… Central… Riparian         17
+# ℹ 15 more variables: FRI_MIXED &lt;dbl&gt;, FRI_SURFAC &lt;dbl&gt;, FRI_ALLFIR &lt;dbl&gt;,
+#   PRC_REPLAC &lt;dbl&gt;, PRC_MIXED &lt;dbl&gt;, PRC_SURFAC &lt;dbl&gt;, FRG_NEW &lt;chr&gt;,
+#   R &lt;dbl&gt;, G &lt;dbl&gt;, B &lt;dbl&gt;, RED &lt;dbl&gt;, GREEN &lt;dbl&gt;, BLUE &lt;dbl&gt;, ACRES &lt;dbl&gt;,
+#   REL_PERCENT &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#bps_model_number_name</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>bps_model_number_name <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/bps_model_number_name.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 819 Columns: 2
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (2): BpS_Name, Model_Code
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(bps_model_number_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  BpS_Name                                            Model_Code    
+  &lt;chr&gt;                                               &lt;chr&gt;         
+1 North Pacific Oak Woodland                          10080_1_2_3_7 
+2 Northwestern Great Plains Aspen Forest and Parkland 10090_19      
+3 Rocky Mountain Aspen Forest and Woodland            10110_15      
+4 Rocky Mountain Aspen Forest and Woodland            10110_16_23_24
+5 Rocky Mountain Aspen Forest and Woodland            10110_20_29   
+6 Rocky Mountain Aspen Forest and Woodland            10110_21      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(bps_model_number_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  BpS_Name                                 Model_Code
+  &lt;chr&gt;                                    &lt;chr&gt;     
+1 Hawaii Montane-Subalpine Mesic Grassland 18230_79  
+2 Hawaii Alpine Dwarf-Shrubland            18240_79  
+3 Hawaii Dry Cliff                         18250_79  
+4 Hawaii Dry Coastal Strand                18260_79  
+5 Hawaii Wet-Mesic Coastal Strand          18270_79  
+6 Hawaii Subalpine Mesic Shrubland         18280_79  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## seems useless</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#combine_raw</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>combine_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/combine_raw.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 146 Columns: 4
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," dbl
+(4): ...1, Var1, Var2, Freq
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(combine_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+   ...1  Var1  Var2  Freq
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     3  2132     1 15903
+2     4  2136     1    96
+3     5  2138     1    98
+4     6  2139     1  3545
+5     7  2140     1  7406
+6     8  2141     1  8560</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(combine_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+   ...1  Var1  Var2   Freq
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1   226  2155   180  63618
+2   227  2156   180  24590
+3   228  2157   180   8961
+4   229  2158   180    171
+5   230  2159   180   1290
+6   231  2160   180 198309</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#LF16_BPS_200</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>LF16_BPS_200 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/LF16_BPS_200.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 1770 Columns: 20
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (4): BPS_MODEL, BPS_NAME, GROUPVEG, FRG_NEW
+dbl (16): VALUE, BPS_CODE, ZONE, FRI_REPLAC, FRI_MIXED, FRI_SURFAC, FRI_ALLF...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LF16_BPS_200)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 20
+  VALUE BPS_CODE  ZONE BPS_MODEL          BPS_NAME GROUPVEG FRI_REPLAC FRI_MIXED
+  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;chr&gt;    &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+1 -9999    -9999    NA &lt;NA&gt;               NoData   NoData           NA        NA
+2    11       11    NA &lt;NA&gt;               Open Wa… Open Wa…         NA        NA
+3    12       12    NA &lt;NA&gt;               Perenni… Perenni…         NA        NA
+4    31       31    NA &lt;NA&gt;               Barren-… Barren-…         NA        NA
+5   381    11250    15 11250_6_12_13_15_… Inter-M… Shrubla…        117        NA
+6   383    10010    25 10010              Inter-M… Sparse           NA        NA
+# ℹ 12 more variables: FRI_SURFAC &lt;dbl&gt;, FRI_ALLFIR &lt;dbl&gt;, PRC_REPLAC &lt;dbl&gt;,
+#   PRC_MIXED &lt;dbl&gt;, PRC_SURFAC &lt;dbl&gt;, FRG_NEW &lt;chr&gt;, R &lt;dbl&gt;, G &lt;dbl&gt;,
+#   B &lt;dbl&gt;, RED &lt;dbl&gt;, GREEN &lt;dbl&gt;, BLUE &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(LF16_BPS_200)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 20
+  VALUE BPS_CODE  ZONE BPS_MODEL     BPS_NAME      GROUPVEG FRI_REPLAC FRI_MIXED
+  &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;         &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+1  2721    10432     3 10432_2_3     Mediterranea… Conifer         221        60
+2  2722    10431     3 10431_2_3_6_7 Mediterranea… Conifer         165        46
+3  2723    13620    41 13620_41_50   Laurentian-A… Hardwoo…        355       680
+4  2724    13622    41 13622_41_50   Laurentian-A… Hardwoo…        230        NA
+5  2725    13620    50 13620_41_50   Laurentian-A… Hardwoo…        355       680
+6  2726    13622    50 13622_41_50   Laurentian-A… Hardwoo…        230        NA
+# ℹ 12 more variables: FRI_SURFAC &lt;dbl&gt;, FRI_ALLFIR &lt;dbl&gt;, PRC_REPLAC &lt;dbl&gt;,
+#   PRC_MIXED &lt;dbl&gt;, PRC_SURFAC &lt;dbl&gt;, FRG_NEW &lt;chr&gt;, R &lt;dbl&gt;, G &lt;dbl&gt;,
+#   B &lt;dbl&gt;, RED &lt;dbl&gt;, GREEN &lt;dbl&gt;, BLUE &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="do">## also may be useless?</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#rec_con_modified</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>ref_con_modified <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/ref_con_modified.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 819 Columns: 11
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (1): Model_Code
+dbl (10): A, B, C, D, E, Agriculture, Developed, Water, UN, UE
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ref_con_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  Model_Code         A     B     C     D     E Agriculture Developed Water    UN
+  &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 10080_1_2_3_7      9     5    86    NA    NA           0         0     0     0
+2 10090_19          21    68    11    NA    NA           0         0     0     0
+3 10110_15           7    35    58    NA    NA           0         0     0     0
+4 10110_16_23_24    49    24     6    18     3           0         0     0     0
+5 10110_20_29       17    18    25    26    14           0         0     0     0
+6 10110_21           9    24    25    27    15           0         0     0     0
+# ℹ 1 more variable: UE &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(ref_con_modified)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  Model_Code     A     B     C     D     E Agriculture Developed Water    UN
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 18230_79       3    97    NA    NA    NA           0         0     0     0
+2 18240_79       9    91    NA    NA    NA           0         0     0     0
+3 18250_79       5    95    NA    NA    NA           0         0     0     0
+4 18260_79       8    34    58    NA    NA           0         0     0     0
+5 18270_79       5    15    80    NA    NA           0         0     0     0
+6 18280_79       2     8    90    NA    NA           0         0     0     0
+# ℹ 1 more variable: UE &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scls_aoi_attributes</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>scls_aoi_attributes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"input_data/scls_aoi_attributes.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+Rows: 11 Columns: 13
+── Column specification
+──────────────────────────────────────────────────────── Delimiter: "," chr
+(2): LABEL, DESCRIPTION dbl (11): ...1, VALUE, Freq, R, G, B, RED, GREEN, BLUE,
+ACRES, REL_PERCENT
+ℹ Use `spec()` to retrieve the full column specification for this data. ℹ
+Specify the column types or set `show_col_types = FALSE` to quiet this message.
+• `` -&gt; `...1`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scls_aoi_attributes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 13
+   ...1 VALUE    Freq LABEL DESCRIPTION          R     G     B   RED GREEN  BLUE
+  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1     1   71130 A     Succession Clas…   161    99    51 0.631 0.388 0.2  
+2     2     2  240864 B     Succession Clas…    56   168     0 0.220 0.659 0    
+3     3     3  631385 C     Succession Clas…   201   222   171 0.788 0.871 0.671
+4     4     4 2266032 D     Succession Clas…   255   248   166 1     0.973 0.651
+5     5     5 5673933 E     Succession Clas…     0    74    77 0     0.290 0.302
+6     6     6   14596 UN    Uncharacteristi…   160     0     0 0.627 0     0    
+# ℹ 2 more variables: ACRES &lt;dbl&gt;, REL_PERCENT &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(scls_aoi_attributes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 13
+   ...1 VALUE    Freq LABEL      DESCRIPTION     R     G     B   RED GREEN  BLUE
+  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     6     6   14596 UN         Uncharacte…   160     0     0 0.627 0     0    
+2     7     7 1766717 UE         Uncharacte…   255     0     0 1     0     0    
+3     8   111  286406 Water      Water           0     0   255 0     0     1    
+4     9   120  563479 Developed  Developed     132     0   138 0.518 0     0.541
+5    10   132     444 Barren or… Barren or …   191   191   191 0.749 0.749 0.749
+6    11   180  761716 Agricultu… Agriculture   223   115   255 0.875 0.451 1    
+# ℹ 2 more variables: ACRES &lt;dbl&gt;, REL_PERCENT &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="plan" class="level3">
+<h3 class="anchored" data-anchor-id="plan">Plan:</h3>
+<p>bps_aoi_attributes - need Freq, BPS_NAME, BPS_MODEL, and VALUE</p>
+<p>combine_raw - present succession classes per BpS</p>
+<p>ref_con_modified - past reference percentages for each succession class per BpS – pivot longer?</p>
+<p>scls_aoi_attributes - names to merge</p>
+<hr>
+</section>
+<section id="need-to" class="level3">
+<h3 class="anchored" data-anchor-id="need-to">Need to:</h3>
+<ol type="1">
+<li>clean up data - just whats needed above</li>
+</ol>
+<ul>
+<li>i think i need to tidy ref_con_modified to fit like combine_raw</li>
+</ul>
+<ol start="2" type="1">
+<li>tie in names with models for:</li>
+</ol>
+<ul>
+<li>Ozark-Ouachita Dry-Mesic Oak Forest</li>
+<li>Ozark-Ouachita Shortleaf Pine-Bluestem Woodland</li>
+<li>Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland</li>
+</ul>
+<ol start="3" type="1">
+<li>merge datasets with name, model, percentages for past and present, and value?</li>
+</ol>
+<hr>
+</section>
+<section id="fake-plot" class="level3">
+<h3 class="anchored" data-anchor-id="fake-plot">Fake plot:</h3>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="challenge_fas_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<hr>
+</section>
+<section id="data-wrangling" class="level3">
+<h3 class="anchored" data-anchor-id="data-wrangling">Data wrangling:</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co">#select only variables needed from bps_aoi_attributes</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>bps_a_a <span class="ot">&lt;-</span> <span class="fu">subset</span>(bps_aoi_attributes, <span class="at">select=</span><span class="fu">c</span>(BPS_NAME, BPS_MODEL, VALUE, Freq))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co">#only keep names needed</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>bps <span class="ot">&lt;-</span> bps_a_a <span class="sc">%&gt;%</span> <span class="fu">filter</span>(BPS_NAME <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Ozark-Ouachita Dry-Mesic Oak Forest"</span>, <span class="st">"Ozark-Ouachita Shortleaf Pine-Bluestem Woodland"</span>, <span class="st">"Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland"</span> ))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co">#now in combine_raw -- filter only values 2160, 2132, and 2141 in Var1</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co"># combine_raw %&gt;% filter(Var1 %&gt;% c("2160", "2132", "2141")) </span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Error in `filter()`:</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ℹ In argument: `Var1 %&gt;% c("2160", "2132", "2141")`.</span></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Caused by error:</span></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a><span class="co"># ! `..1` must be of size 146 or 1, not size 149.</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a><span class="co">#trying to filter a different way</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a><span class="co">#first, subset columns needed</span></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>combine_raw_sub <span class="ot">&lt;-</span> <span class="fu">subset</span>(combine_raw, <span class="at">select=</span><span class="fu">c</span>(Var1, Var2, Freq))</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a><span class="co">#make a vector of values needed</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>comb_raw <span class="ot">&lt;-</span> </span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>  combine_raw_sub <span class="sc">|&gt;</span> </span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Var1 <span class="sc">==</span> <span class="dv">2160</span> <span class="sc">|</span> Var1 <span class="sc">==</span> <span class="dv">2132</span> <span class="sc">|</span> Var1 <span class="sc">==</span> <span class="dv">2141</span>)</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a><span class="co">#now cleaning LF16_BPS_200 like bps_aoi_attributes</span></span>
+<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>lf16 <span class="ot">&lt;-</span> <span class="fu">subset</span>(LF16_BPS_200, <span class="at">select=</span><span class="fu">c</span>(BPS_NAME, BPS_MODEL, VALUE))</span>
+<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a><span class="co">#keep only names needed</span></span>
+<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a>lf <span class="ot">&lt;-</span> lf16 <span class="sc">%&gt;%</span> <span class="fu">filter</span>(BPS_NAME <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Ozark-Ouachita Dry-Mesic Oak Forest"</span>, <span class="st">"Ozark-Ouachita Shortleaf Pine-Bluestem Woodland"</span>, <span class="st">"Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland"</span> ))</span>
+<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a><span class="co">#filter ref_con_modified for specific model codes "15070_44", "13040_32_43_44_49", "13670_32_44"</span></span>
+<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a>rcm <span class="ot">&lt;-</span> ref_con_modified <span class="sc">%&gt;%</span> <span class="fu">filter</span>(Model_Code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"15070_44"</span>, <span class="st">"13040_32_43_44_49"</span>, <span class="st">"13670_32_44"</span>))</span>
+<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a><span class="co">#pivot longer rcm data frame</span></span>
+<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>rcm_long <span class="ot">&lt;-</span> rcm <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(</span>
+<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols =</span> <span class="sc">!</span>Model_Code, </span>
+<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">names_to =</span> <span class="st">"label"</span>, </span>
+<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">values_to =</span> <span class="st">"score"</span></span>
+<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a><span class="co">#change column name to BPS_MODEL to match other datasets</span></span>
+<span id="cb37-47"><a href="#cb37-47" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(rcm_long) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'BPS_MODEL'</span>, <span class="st">'class'</span>, <span class="st">'score'</span>)</span>
+<span id="cb37-48"><a href="#cb37-48" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-49"><a href="#cb37-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-50"><a href="#cb37-50" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-51"><a href="#cb37-51" aria-hidden="true" tabindex="-1"></a><span class="co">#get succession classes from scls_aoi_attributes A, B, C, D, E, UN, UE, Agriculture, Developed</span></span>
+<span id="cb37-52"><a href="#cb37-52" aria-hidden="true" tabindex="-1"></a>scls <span class="ot">&lt;-</span> scls_aoi_attributes <span class="sc">%&gt;%</span> <span class="fu">filter</span>(LABEL <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>,<span class="st">"E"</span>,<span class="st">"UN"</span>,<span class="st">"UE"</span>, <span class="st">"Agriculture"</span>, <span class="st">"Developed"</span>))</span>
+<span id="cb37-53"><a href="#cb37-53" aria-hidden="true" tabindex="-1"></a><span class="co">#may not use this, just manually add?</span></span>
+<span id="cb37-54"><a href="#cb37-54" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span>
+<span id="cb37-55"><a href="#cb37-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-56"><a href="#cb37-56" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb37-57"><a href="#cb37-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-58"><a href="#cb37-58" aria-hidden="true" tabindex="-1"></a><span class="do">###</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,216 @@
+---
+title: "challenge_fas"
+format: html
+editor: visual
+---
+
+## Coding Challenge
+
+------------------------------------------------------------------------
+
+Simple example grouped bar plot
+
+```{r, echo = FALSE}
+##example grouped bar plot
+ # library
+library(ggplot2)
+ 
+# create a dataset
+specie <- c(rep("sorgho" , 3) , rep("poacee" , 3) , rep("banana" , 3) , rep("triticum" , 3) )
+condition <- rep(c("normal" , "stress" , "Nitrogen") , 4)
+value <- abs(rnorm(12 , 0 , 15))
+data <- data.frame(specie,condition,value)
+ 
+# Grouped
+ggplot(data, aes(fill=condition, y=value, x=specie)) + 
+    geom_bar(position="dodge", stat="identity")
+```
+
+------------------------------------------------------------------------
+
+### Review of data:
+
+```{r}
+
+library(readr)
+
+#bps_aoi_attributes
+bps_aoi_attributes <- read_csv("input_data/bps_aoi_attributes.csv")
+head(bps_aoi_attributes)
+tail(bps_aoi_attributes)
+
+#bps_model_number_name
+bps_model_number_name <- read_csv("input_data/bps_model_number_name.csv")
+head(bps_model_number_name)
+tail(bps_model_number_name)
+## seems useless
+
+#combine_raw
+combine_raw <- read_csv("input_data/combine_raw.csv")
+head(combine_raw)
+tail(combine_raw)
+
+#LF16_BPS_200
+LF16_BPS_200 <- read_csv("input_data/LF16_BPS_200.csv")
+head(LF16_BPS_200)
+tail(LF16_BPS_200)
+## also may be useless?
+
+#rec_con_modified
+ref_con_modified <- read_csv("input_data/ref_con_modified.csv")
+head(ref_con_modified)
+tail(ref_con_modified)
+
+#scls_aoi_attributes
+scls_aoi_attributes <- read_csv("input_data/scls_aoi_attributes.csv")
+head(scls_aoi_attributes)
+tail(scls_aoi_attributes)
+
+```
+
+------------------------------------------------------------------------
+
+### Plan:
+
+bps_aoi_attributes - need Freq, BPS_NAME, BPS_MODEL, and VALUE
+
+combine_raw - present succession classes per BpS
+
+ref_con_modified - past reference percentages for each succession class per BpS -- pivot longer?
+
+scls_aoi_attributes - names to merge
+
+------------------------------------------------------------------------
+
+### Need to:
+
+1.  clean up data - just whats needed above
+
+-   i think i need to tidy ref_con_modified to fit like combine_raw
+
+2.  tie in names with models for:
+
+-   Ozark-Ouachita Dry-Mesic Oak Forest
+-   Ozark-Ouachita Shortleaf Pine-Bluestem Woodland
+-   Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland
+
+3.  merge datasets with name, model, percentages for past and present, and value?
+
+------------------------------------------------------------------------
+
+### Fake plot:
+
+```{r, echo = FALSE, results = FALSE, message = FALSE}
+#load libraries
+library(tidyverse)
+
+#set seed for reproducibility
+set.seed(123)
+
+#create dataset
+data <- data.frame(
+  bps = rep(c("eco A", "eco B", "eco C"), each = 9),
+  label = rep(c("A", "B", "C", "D", "E", "UN", "UE", "Agriculture", "Developed"), times = 3),
+  ref_cur = rep(c("Present", "Past"), each = 27),
+  amount = sample(0:60, 27, replace = TRUE)
+)
+
+data
+
+#set x-axis order
+level_order <- c("Developed", "Agriculture", "UE", "UN", "E", "D", "C", "B", "A")
+
+# Plot
+plot <-
+  ggplot(data, aes(fill=(ref_cur), y=amount, x=label)) +
+  geom_col(width = 0.8, position = position_dodge()) +
+  coord_flip() +
+  facet_grid(. ~bps) +
+  labs(
+    title = "Succession classes past and present",
+    subtitle = "Fake chart with fake data",
+    caption = "Data from landfire.gov",
+    x = "",
+    y = "Amount (units unknown)",
+    fill = "Time period") +
+  scale_x_discrete(limits = level_order) + 
+  theme_light()
+
+plot
+
+```
+
+------------------------------------------------------------------------
+
+
+### Data wrangling:
+
+```{r}
+###
+#select only variables needed from bps_aoi_attributes
+bps_a_a <- subset(bps_aoi_attributes, select=c(BPS_NAME, BPS_MODEL, VALUE, Freq))
+
+#only keep names needed
+library(tidyverse)
+bps <- bps_a_a %>% filter(BPS_NAME %in% c("Ozark-Ouachita Dry-Mesic Oak Forest", "Ozark-Ouachita Shortleaf Pine-Bluestem Woodland", "Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland" ))
+###
+
+###
+#now in combine_raw -- filter only values 2160, 2132, and 2141 in Var1
+# combine_raw %>% filter(Var1 %>% c("2160", "2132", "2141")) 
+#Error in `filter()`:
+# ℹ In argument: `Var1 %>% c("2160", "2132", "2141")`.
+# Caused by error:
+# ! `..1` must be of size 146 or 1, not size 149.
+
+#trying to filter a different way
+#first, subset columns needed
+combine_raw_sub <- subset(combine_raw, select=c(Var1, Var2, Freq))
+#make a vector of values needed
+comb_raw <- 
+  combine_raw_sub |> 
+  filter(Var1 == 2160 | Var1 == 2132 | Var1 == 2141)
+###
+
+###
+#now cleaning LF16_BPS_200 like bps_aoi_attributes
+lf16 <- subset(LF16_BPS_200, select=c(BPS_NAME, BPS_MODEL, VALUE))
+
+#keep only names needed
+lf <- lf16 %>% filter(BPS_NAME %in% c("Ozark-Ouachita Dry-Mesic Oak Forest", "Ozark-Ouachita Shortleaf Pine-Bluestem Woodland", "Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland" ))
+###
+
+###
+#filter ref_con_modified for specific model codes "15070_44", "13040_32_43_44_49", "13670_32_44"
+rcm <- ref_con_modified %>% filter(Model_Code %in% c("15070_44", "13040_32_43_44_49", "13670_32_44"))
+
+#pivot longer rcm data frame
+rcm_long <- rcm %>% pivot_longer(
+  cols = !Model_Code, 
+  names_to = "label", 
+  values_to = "score"
+  )
+
+#change column name to BPS_MODEL to match other datasets
+colnames(rcm_long) <- c('BPS_MODEL', 'class', 'score')
+###
+
+###
+#get succession classes from scls_aoi_attributes A, B, C, D, E, UN, UE, Agriculture, Developed
+scls <- scls_aoi_attributes %>% filter(LABEL %in% c("A", "B", "C", "D","E","UN","UE", "Agriculture", "Developed"))
+#may not use this, just manually add?
+###
+
+#
+
+###
+
+
+
+
+
+
+```
+
+
+
